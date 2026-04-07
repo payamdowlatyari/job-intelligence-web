@@ -1,0 +1,41 @@
+export interface Job {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  job_type?: string;
+  description_clean?: string;
+  summary?: string;
+  url?: string;
+  posted_date?: string;
+}
+
+export interface MatchResult {
+  job: Job;
+  score: number;
+}
+
+export interface MatchRequest {
+  resume_text: string;
+  skills?: string;
+  location?: string;
+  company?: string;
+}
+
+export interface CoverLetterRequest {
+  job_id: string;
+  resume_text: string;
+  tone: string;
+  length: string;
+}
+
+export interface CoverLetterFromUrlRequest {
+  job_url: string;
+  resume_text: string;
+  tone: string;
+  length: string;
+}
+
+export interface CoverLetterResponse {
+  cover_letter: string;
+}
