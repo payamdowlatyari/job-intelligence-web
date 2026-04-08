@@ -1,7 +1,34 @@
-const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "/api";
+const baseURL =
+  process.env.NODE_ENV === "production"
+    ? process.env.NEXT_PUBLIC_API_BASE_URL
+    : "http://localhost:8000";
 
-export async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
-  const url = `${baseURL}${path}`;
+/**
+ * Returns a full URL for an API endpoint given a path.
+ */
+export function getApiUrl(path: string): string {
+  if (!baseURL) {
+    throw new Error("API base URL is not defined");
+  }
+  return `${baseURL}/api/v1${path}`;
+}
+
+/**
+ * Fetches data from the API at the given path and returns the parsed JSON response.
+ * If the response is not successful (2xx), an error is thrown with the response status and status text.
+ * If the response is successful, the parsed JSON response is returned.
+ * If the response contains a "detail" or "message" key, the error thrown is set to that value.
+ * @param path - The path of the API endpoint to fetch from
+ * @param options - Optional fetch options
+ * @returns - A promise that resolves to the parsed JSON response
+ * @throws - An error if the response is not successful
+ */
+export async function apiFetch<T>(
+  path: string,
+  options?: RequestInit,
+): Promise<T> {
+  const url = getApiUrl(path);
+
   const res = await fetch(url, options);
 
   if (!res.ok) {
@@ -16,5 +43,7 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
     throw new Error(message);
   }
 
-  return res.json() as Promise<T>;
+  const { jobs } = (await res.json()) as { jobs: T; total?: number };
+
+  return jobs;
 }

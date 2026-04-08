@@ -25,7 +25,12 @@ export default function JobsPage() {
     job_type: "",
   });
 
-  const { data: jobs, isLoading, isError, error } = useQuery({
+  const {
+    data: jobs,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ["jobs", filters],
     queryFn: () => fetchJobs(filters),
   });
@@ -51,8 +56,7 @@ export default function JobsPage() {
 
       <form
         onSubmit={handleSearch}
-        className="mb-8 rounded-xl border border-border bg-card p-4 shadow-sm"
-      >
+        className="mb-8 rounded-xl border border-border bg-card p-4 shadow-sm">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-1.5">
             <Label htmlFor="keyword">Keyword</Label>
@@ -63,7 +67,7 @@ export default function JobsPage() {
                 placeholder="Job title, skills…"
                 className="pl-8"
                 value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
+                onChange={e => setKeyword(e.target.value)}
               />
             </div>
           </div>
@@ -74,7 +78,7 @@ export default function JobsPage() {
               id="company"
               placeholder="Company name"
               value={company}
-              onChange={(e) => setCompany(e.target.value)}
+              onChange={e => setCompany(e.target.value)}
             />
           </div>
 
@@ -84,7 +88,7 @@ export default function JobsPage() {
               id="location"
               placeholder="City, state, remote…"
               value={location}
-              onChange={(e) => setLocation(e.target.value)}
+              onChange={e => setLocation(e.target.value)}
             />
           </div>
 
@@ -94,7 +98,7 @@ export default function JobsPage() {
               id="job_type"
               placeholder="Full-time, part-time…"
               value={jobType}
-              onChange={(e) => setJobType(e.target.value)}
+              onChange={e => setJobType(e.target.value)}
             />
           </div>
         </div>
@@ -121,7 +125,7 @@ export default function JobsPage() {
       )}
       {!isLoading && !isError && jobs && jobs.length > 0 && (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {jobs.map((job) => (
+          {jobs.map(job => (
             <JobCard key={job.id} job={job} />
           ))}
         </div>

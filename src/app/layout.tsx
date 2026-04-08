@@ -8,14 +8,19 @@ export const metadata: Metadata = {
   description: "AI-powered job intelligence platform",
 };
 
+/**
+ * The root layout component.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+    <html lang="en" className="h-full antialiased" suppressHydrationWarning>
+      <body
+        className="min-h-full flex flex-col bg-background text-foreground"
+        suppressHydrationWarning>
         <Providers>
           <Header />
           <main className="flex-1">{children}</main>

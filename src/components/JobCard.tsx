@@ -8,6 +8,11 @@ interface JobCardProps {
   job: Job;
 }
 
+/**
+ * JobCard component displays a job card with title, company, location, and job type.
+ *
+ * @param {JobCardProps} props - JobCard props
+ */
 export function JobCard({ job }: JobCardProps) {
   return (
     <Link href={`/jobs/${job.id}`} className="block group">
@@ -28,7 +33,9 @@ export function JobCard({ job }: JobCardProps) {
           </div>
           {job.job_type && (
             <div className="mt-1">
-              <Badge variant="secondary" className="flex items-center gap-1 w-fit">
+              <Badge
+                variant="secondary"
+                className="flex items-center gap-1 w-fit">
                 <Briefcase className="h-3 w-3" />
                 {job.job_type}
               </Badge>
