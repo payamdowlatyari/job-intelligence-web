@@ -14,7 +14,6 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -25,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { Spinner } from "@/components/Spinner";
 import { ErrorMessage } from "@/components/ErrorMessage";
+import { ResumeInput } from "@/components/ResumeInput";
 
 const TONES = ["professional", "casual", "enthusiastic"] as const;
 const LENGTHS = ["short", "medium", "long"] as const;
@@ -46,9 +46,17 @@ const jobUrlSchema = z.object({
 type JobIdFormValues = z.infer<typeof jobIdSchema>;
 type JobUrlFormValues = z.infer<typeof jobUrlSchema>;
 
+/**
+ * A component that displays a generated cover letter and allows the user to copy it.
+ * @param {{ text: string }} - The generated cover letter text.
+ */
 function CoverLetterResult({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
 
+  /**
+   * Copies the generated cover letter to the user's clipboard.
+   * Sets the `copied` state to true for 2 seconds after copying.
+   */
   async function handleCopy() {
     await navigator.clipboard.writeText(text);
     setCopied(true);
@@ -66,8 +74,7 @@ function CoverLetterResult({ text }: { text: string }) {
           variant="outline"
           size="sm"
           onClick={handleCopy}
-          className="gap-1.5"
-        >
+          className="gap-1.5">
           {copied ? (
             <>
               <Check className="h-3.5 w-3.5 text-green-600" /> Copied
@@ -88,6 +95,13 @@ function CoverLetterResult({ text }: { text: string }) {
   );
 }
 
+/**
+ * A function that takes a tone value and a length value and returns a component that displays a dropdown for each.
+ * @param {toneValue} - The tone value.
+ * @param {lengthValue} - The length value.
+ * @param {onToneChange} - A function that is called when the tone value changes.
+ * @param {onLengthChange} - A function that is called when the length value changes.
+ */
 function ToneAndLength({
   toneValue,
   lengthValue,
@@ -108,7 +122,7 @@ function ToneAndLength({
             <SelectValue placeholder="Select tone" />
           </SelectTrigger>
           <SelectContent>
-            {TONES.map((t) => (
+            {TONES.map(t => (
               <SelectItem key={t} value={t}>
                 {t.charAt(0).toUpperCase() + t.slice(1)}
               </SelectItem>
@@ -123,7 +137,7 @@ function ToneAndLength({
             <SelectValue placeholder="Select length" />
           </SelectTrigger>
           <SelectContent>
-            {LENGTHS.map((l) => (
+            {LENGTHS.map(l => (
               <SelectItem key={l} value={l}>
                 {l.charAt(0).toUpperCase() + l.slice(1)}
               </SelectItem>
@@ -135,6 +149,11 @@ function ToneAndLength({
   );
 }
 
+/**
+ * A form component that allows users to generate a cover letter based on a job ID.
+ * @param {{ defaultJobId: string }} props - The props object.
+ * @param {string} props.defaultJobId - The default job ID to generate a cover letter for.
+ */
 function FromJobIdTab({ defaultJobId }: { defaultJobId: string }) {
   const {
     register,
@@ -153,6 +172,7 @@ function FromJobIdTab({ defaultJobId }: { defaultJobId: string }) {
 
   const tone = watch("tone");
   const length = watch("length");
+  const resumeText = watch("resume_text") ?? "";
 
   const mutation = useMutation({ mutationFn: generateCoverLetter });
 
@@ -164,36 +184,26 @@ function FromJobIdTab({ defaultJobId }: { defaultJobId: string }) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
       <div className="space-y-1.5">
         <Label htmlFor="job_id">Job ID *</Label>
-        <Input
-          id="job_id"
-          placeholder="e.g. abc123"
-          {...register("job_id")}
-        />
+        <Input id="job_id" placeholder="e.g. abc123" {...register("job_id")} />
         {errors.job_id && (
           <p className="text-xs text-destructive">{errors.job_id.message}</p>
         )}
       </div>
 
-      <div className="space-y-1.5">
-        <Label htmlFor="resume_text_id">Resume Text *</Label>
-        <Textarea
-          id="resume_text_id"
-          placeholder="Paste your resume here…"
-          className="min-h-[160px]"
-          {...register("resume_text")}
-        />
-        {errors.resume_text && (
-          <p className="text-xs text-destructive">
-            {errors.resume_text.message}
-          </p>
-        )}
-      </div>
+      <ResumeInput
+        id="resume_text_id"
+        value={resumeText}
+        onChange={text =>
+          setValue("resume_text", text, { shouldValidate: true })
+        }
+        error={errors.resume_text?.message}
+      />
 
       <ToneAndLength
         toneValue={tone}
         lengthValue={length}
-        onToneChange={(v) => setValue("tone", v as typeof TONES[number])}
-        onLengthChange={(v) => setValue("length", v as typeof LENGTHS[number])}
+        onToneChange={v => setValue("tone", v as (typeof TONES)[number])}
+        onLengthChange={v => setValue("length", v as (typeof LENGTHS)[number])}
       />
 
       <Button type="submit" disabled={mutation.isPending} className="gap-2">
@@ -217,6 +227,15 @@ function FromJobIdTab({ defaultJobId }: { defaultJobId: string }) {
   );
 }
 
+/**
+ * A component that generates a cover letter based on a job URL.
+ *
+ * The component contains a form with fields for the job URL, resume text, tone, and length.
+ * When the form is submitted, it calls the `generateCoverLetterFromUrl` mutation function to generate a cover letter.
+ *
+ * If the mutation is pending, it displays a spinner. If the mutation is an error, it displays an error message.
+ * If the mutation is successful, it displays the generated cover letter.
+ */
 function FromUrlTab() {
   const {
     register,
@@ -234,6 +253,7 @@ function FromUrlTab() {
 
   const tone = watch("tone");
   const length = watch("length");
+  const resumeText = watch("resume_text") ?? "";
 
   const mutation = useMutation({ mutationFn: generateCoverLetterFromUrl });
 
@@ -256,26 +276,20 @@ function FromUrlTab() {
         )}
       </div>
 
-      <div className="space-y-1.5">
-        <Label htmlFor="resume_text_url">Resume Text *</Label>
-        <Textarea
-          id="resume_text_url"
-          placeholder="Paste your resume here…"
-          className="min-h-[160px]"
-          {...register("resume_text")}
-        />
-        {errors.resume_text && (
-          <p className="text-xs text-destructive">
-            {errors.resume_text.message}
-          </p>
-        )}
-      </div>
+      <ResumeInput
+        id="resume_text_url"
+        value={resumeText}
+        onChange={text =>
+          setValue("resume_text", text, { shouldValidate: true })
+        }
+        error={errors.resume_text?.message}
+      />
 
       <ToneAndLength
         toneValue={tone}
         lengthValue={length}
-        onToneChange={(v) => setValue("tone", v as typeof TONES[number])}
-        onLengthChange={(v) => setValue("length", v as typeof LENGTHS[number])}
+        onToneChange={v => setValue("tone", v as (typeof TONES)[number])}
+        onLengthChange={v => setValue("length", v as (typeof LENGTHS)[number])}
       />
 
       <Button type="submit" disabled={mutation.isPending} className="gap-2">
@@ -299,6 +313,14 @@ function FromUrlTab() {
   );
 }
 
+/**
+ * A component that renders the cover letter generator page content.
+ *
+ * The component takes a search parameter "job_id" as an optional default job ID.
+ * It renders a tabbed interface with two tabs: "From Job ID" and "From URL".
+ * The "From Job ID" tab renders a form to generate a cover letter from a job ID.
+ * The "From URL" tab renders a form to generate a cover letter from a job posting URL.
+ */
 function CoverLetterPageContent() {
   const searchParams = useSearchParams();
   const defaultJobId = searchParams.get("job_id") ?? "";
@@ -330,6 +352,13 @@ function CoverLetterPageContent() {
   );
 }
 
+/**
+ * A page that renders a cover letter generator.
+ * The page renders a tabbed interface with two tabs: "From Job ID" and "From URL".
+ * The "From Job ID" tab renders a form to generate a cover letter from a job ID.
+ * The "From URL" tab renders a form to generate a cover letter from a job posting URL.
+ * The page takes a search parameter "job_id" as an optional default job ID.
+ */
 export default function CoverLetterPage() {
   return (
     <Suspense fallback={<Spinner />}>

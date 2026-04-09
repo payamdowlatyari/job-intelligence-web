@@ -26,6 +26,7 @@ export function getApiUrl(path: string): string {
 export async function apiFetch<T>(
   path: string,
   options?: RequestInit,
+  responseKey?: string,
 ): Promise<T> {
   const url = getApiUrl(path);
 
@@ -43,7 +44,11 @@ export async function apiFetch<T>(
     throw new Error(message);
   }
 
-  const { jobs } = (await res.json()) as { jobs: T; total?: number };
+  const body = await res.json();
 
-  return jobs;
+  if (responseKey) {
+    return body[responseKey] as T;
+  }
+
+  return (body.jobs ?? body) as T;
 }

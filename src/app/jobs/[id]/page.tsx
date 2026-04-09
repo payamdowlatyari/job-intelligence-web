@@ -3,7 +3,13 @@
 import { use } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Building2, MapPin, Briefcase, FileText } from "lucide-react";
+import {
+  ArrowLeft,
+  Building2,
+  MapPin,
+  Briefcase,
+  FileText,
+} from "lucide-react";
 import { fetchJob } from "@/lib/api/jobs";
 import { Spinner } from "@/components/Spinner";
 import { ErrorMessage } from "@/components/ErrorMessage";
@@ -15,10 +21,20 @@ interface JobDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
+/**
+ * A page that displays a job by ID.
+ *
+ * @param {JobDetailPageProps} props - Props for the page component.
+ */
 export default function JobDetailPage({ params }: JobDetailPageProps) {
   const { id } = use(params);
 
-  const { data: job, isLoading, isError, error } = useQuery({
+  const {
+    data: job,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ["job", id],
     queryFn: () => fetchJob(id),
     enabled: !!id,
@@ -28,8 +44,7 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
       <Link
         href="/jobs"
-        className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-      >
+        className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
         <ArrowLeft className="h-4 w-4" />
         Back to Jobs
       </Link>

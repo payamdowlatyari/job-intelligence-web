@@ -4,6 +4,11 @@ interface SpinnerProps {
   className?: string;
 }
 
+/**
+ * A loading spinner component.
+ *
+ * @param {string} [className] - Optional class name for the spinner.
+ */
 export function Spinner({ className }: SpinnerProps) {
   return (
     <div className={cn("flex items-center justify-center py-12", className)}>

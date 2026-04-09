@@ -12,6 +12,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
+/**
+ * The JobsPage component renders a page for browsing jobs.
+ * It displays a form with four fields: keyword, company, location, and job type.
+ * The form can be submitted to search for jobs with the given filters.
+ * The component also renders a list of job cards with the search results.
+ * If no jobs are found, it renders an empty state message.
+ * If there is an error loading the jobs, it renders an error message.
+ */
 export default function JobsPage() {
   const [keyword, setKeyword] = useState("");
   const [company, setCompany] = useState("");

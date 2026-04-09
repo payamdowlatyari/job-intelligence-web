@@ -11,15 +11,23 @@ export interface Job {
 }
 
 export interface MatchResult {
+  similarity_score: number;
+  match_reason?: string;
   job: Job;
-  score: number;
+}
+
+export interface MatchResponse {
+  total_candidates: number;
+  matches: MatchResult[];
 }
 
 export interface MatchRequest {
   resume_text: string;
-  skills?: string;
+  skills?: string[];
   location?: string;
   company?: string;
+  job_type?: string;
+  top_k?: number;
 }
 
 export interface CoverLetterRequest {

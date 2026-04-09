@@ -11,6 +11,9 @@ const navLinks = [
   { href: "/cover-letter", label: "Cover Letter" },
 ];
 
+/**
+ * Header component for the app.
+ */
 export function Header() {
   const pathname = usePathname();
 
@@ -19,8 +22,7 @@ export function Header() {
       <div className="mx-auto flex h-14 max-w-7xl items-center gap-6 px-4 sm:px-6">
         <Link
           href="/"
-          className="flex items-center gap-2 font-semibold text-foreground"
-        >
+          className="flex items-center gap-2 font-semibold text-foreground">
           <Briefcase className="h-5 w-5 text-primary" />
           <span>Job Intelligence</span>
         </Link>
@@ -34,9 +36,8 @@ export function Header() {
                 "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
                 pathname === href || pathname.startsWith(href + "/")
                   ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              )}
-            >
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              )}>
               {label}
             </Link>
           ))}

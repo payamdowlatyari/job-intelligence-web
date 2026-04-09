@@ -26,6 +26,12 @@ const features = [
   },
 ];
 
+/**
+ * The Home component renders a landing page with a hero section and a feature grid.
+ *
+ * The hero section contains a heading, a description, and a call-to-action to get started.
+ * The feature grid contains three cards, each with a title, description, and a call-to-action to learn more.
+ */
 export default function Home() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
