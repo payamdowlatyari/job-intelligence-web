@@ -55,7 +55,18 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem(STORAGE_KEY);
   }, []);
 
-  if (!hydrated) return <>{children}</>;
+  if (!hydrated)
+    return (
+      <ResumeContext.Provider
+        value={{
+          resumeText: "",
+          setResumeText: () => {},
+          clearResume: () => {},
+          hasSavedResume: false,
+        }}>
+        {children}
+      </ResumeContext.Provider>
+    );
 
   return (
     <ResumeContext.Provider
