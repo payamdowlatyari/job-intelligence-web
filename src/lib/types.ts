@@ -47,3 +47,16 @@ export interface CoverLetterFromUrlRequest {
 export interface CoverLetterResponse {
   cover_letter: string;
 }
+
+export interface IngestFailure {
+  url: string;
+  error: string;
+}
+
+export interface IngestResponse {
+  ingested_count: number;
+  existing_count: number;
+  failed_count: number;
+  jobs: Job[];
+  failures: IngestFailure[];
+}

@@ -6,6 +6,7 @@ import { Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
+  { href: "/apply", label: "Apply" },
   { href: "/jobs", label: "Jobs" },
   { href: "/match", label: "Match" },
   { href: "/cover-letter", label: "Cover Letter" },

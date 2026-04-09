@@ -26,7 +26,7 @@ export function getApiUrl(path: string): string {
 export async function apiFetch<T>(
   path: string,
   options?: RequestInit,
-  responseKey?: string,
+  responseKey?: string | null,
 ): Promise<T> {
   const url = getApiUrl(path);
 
@@ -45,6 +45,10 @@ export async function apiFetch<T>(
   }
 
   const body = await res.json();
+
+  if (responseKey === null) {
+    return body as T;
+  }
 
   if (responseKey) {
     return body[responseKey] as T;
