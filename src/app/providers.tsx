@@ -1,6 +1,7 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { SessionProvider } from "next-auth/react";
 import { useState } from "react";
 import { ResumeProvider } from "@/lib/resume-context";
 
@@ -18,8 +19,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ResumeProvider>{children}</ResumeProvider>
-    </QueryClientProvider>
+    <SessionProvider>
+      <QueryClientProvider client={queryClient}>
+        <ResumeProvider>{children}</ResumeProvider>
+      </QueryClientProvider>
+    </SessionProvider>
   );
 }
