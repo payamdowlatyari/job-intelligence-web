@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Briefcase, Building2, MapPin } from "lucide-react";
+import { Briefcase, Building2, MapPin, Calendar, Clock } from "lucide-react";
 import type { Job } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -39,6 +39,39 @@ export function JobCard({ job }: JobCardProps) {
                 <Briefcase className="h-3 w-3" />
                 {job.job_type}
               </Badge>
+            </div>
+          )}
+          {(job.date_posted || job.posted_date) && (
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Calendar className="h-3 w-3 shrink-0" />
+              <span>
+                Posted:{" "}
+                {new Date(
+                  job.date_posted || job.posted_date || "",
+                ).toLocaleDateString()}
+              </span>
+            </div>
+          )}
+          {job.created_at && (
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Clock className="h-3 w-3 shrink-0" />
+              <span>
+                Added: {new Date(job.created_at).toLocaleDateString()}
+              </span>
+            </div>
+          )}
+          {job.skills && job.skills.length > 0 && (
+            <div className="mt-1 flex flex-wrap gap-1">
+              {job.skills.slice(0, 4).map(skill => (
+                <Badge key={skill} variant="outline" className="text-xs">
+                  {skill}
+                </Badge>
+              ))}
+              {job.skills.length > 4 && (
+                <Badge variant="outline" className="text-xs">
+                  +{job.skills.length - 4}
+                </Badge>
+              )}
             </div>
           )}
         </CardContent>

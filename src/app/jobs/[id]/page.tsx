@@ -15,6 +15,9 @@ import {
   FileText,
   Pencil,
   Trash2,
+  Calendar,
+  Clock,
+  Tag,
 } from "lucide-react";
 import { fetchJob, updateJob, deleteJob } from "@/lib/api/jobs";
 import { Spinner } from "@/components/Spinner";
@@ -153,13 +156,34 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
                   {job.job_type}
                 </Badge>
               )}
-              {job.posted_date && (
-                <span className="text-xs text-muted-foreground">
-                  Posted: {job.posted_date}
+              {(job.date_posted || job.posted_date) && (
+                <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <Calendar className="h-3.5 w-3.5" />
+                  Posted:{" "}
+                  {new Date(
+                    job.date_posted || job.posted_date || "",
+                  ).toLocaleDateString()}
+                </span>
+              )}
+              {job.created_at && (
+                <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <Clock className="h-3.5 w-3.5" />
+                  Added: {new Date(job.created_at).toLocaleDateString()}
                 </span>
               )}
             </div>
           </div>
+
+          {job.skills && job.skills.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2">
+              <Tag className="h-4 w-4 text-muted-foreground" />
+              {job.skills.map(skill => (
+                <Badge key={skill} variant="outline">
+                  {skill}
+                </Badge>
+              ))}
+            </div>
+          )}
 
           <div className="flex flex-wrap gap-2">
             <Button asChild>

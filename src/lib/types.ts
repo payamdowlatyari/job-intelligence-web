@@ -8,6 +8,9 @@ export interface Job {
   summary?: string;
   url?: string;
   posted_date?: string;
+  date_posted?: string;
+  created_at?: string;
+  skills?: string[];
 }
 
 export interface MatchResult {
