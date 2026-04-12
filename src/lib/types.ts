@@ -48,6 +48,19 @@ export interface CoverLetterResponse {
   cover_letter: string;
 }
 
+export interface CreateJobRequest {
+  title: string;
+  company: string;
+  location: string;
+  job_type?: string;
+  description_clean?: string;
+  summary?: string;
+  url?: string;
+  posted_date?: string;
+}
+
+export type UpdateJobRequest = Partial<CreateJobRequest>;
+
 export interface IngestFailure {
   url: string;
   error: string;

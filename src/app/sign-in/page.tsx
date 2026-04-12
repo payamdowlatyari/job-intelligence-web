@@ -3,6 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Briefcase } from "lucide-react";
 
+/**
+ * SignInPage
+ *
+ * Sign in to Job Intelligence using GitHub or Google.
+ */
 export default function SignInPage() {
   return (
     <div className="flex min-h-[60vh] items-center justify-center px-4">
@@ -43,6 +48,9 @@ export default function SignInPage() {
   );
 }
 
+/**
+ * GitHubIcon is a React component that renders a GitHub icon.
+ */
 function GitHubIcon() {
   return (
     <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
@@ -51,6 +59,9 @@ function GitHubIcon() {
   );
 }
 
+/**
+ * GoogleIcon is a React component that renders a Google icon.
+ */
 function GoogleIcon() {
   return (
     <svg className="h-4 w-4" viewBox="0 0 24 24">

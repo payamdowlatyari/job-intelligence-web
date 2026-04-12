@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, Plus } from "lucide-react";
 import { fetchJobs } from "@/lib/api/jobs";
 import { JobCard } from "@/components/JobCard";
 import { Spinner } from "@/components/Spinner";
@@ -58,9 +59,17 @@ export default function JobsPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-      <h1 className="text-2xl font-bold tracking-tight text-foreground mb-6">
-        Browse Jobs
-      </h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">
+          Browse Jobs
+        </h1>
+        <Button asChild>
+          <Link href="/jobs/new">
+            <Plus className="h-4 w-4" />
+            New Job
+          </Link>
+        </Button>
+      </div>
 
       <form
         onSubmit={handleSearch}
