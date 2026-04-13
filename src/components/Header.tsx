@@ -88,8 +88,10 @@ export function Header() {
             variant="ghost"
             size="sm"
             className="md:hidden"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu">
+            onClick={() => setMenuOpen((prev) => !prev)}
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav">
             {menuOpen ? (
               <X className="h-5 w-5" />
             ) : (
@@ -101,7 +103,7 @@ export function Header() {
 
       {/* Mobile nav */}
       {menuOpen && (
-        <nav className="md:hidden border-t border-border bg-background px-4 py-3 space-y-1">
+        <nav id="mobile-nav" className="md:hidden border-t border-border bg-background px-4 py-3 space-y-1">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
