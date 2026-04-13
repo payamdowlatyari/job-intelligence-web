@@ -50,6 +50,11 @@ const LENGTHS = ["short", "medium", "long"] as const;
 /*  Step 1 – URL input                                                */
 /* ------------------------------------------------------------------ */
 
+/**
+ * A step in the job application process that allows users to input a job posting URL and fetches the job details from the URL.
+ * @param {{ onJobIngested: (job: Job) => void }} props - The props object.
+ * @param {(job: Job) => void} props.onJobIngested - A callback function that is called when a job is successfully fetched from the URL. It is passed the job object as a parameter.
+ */
 function UrlStep({ onJobIngested }: { onJobIngested: (job: Job) => void }) {
   const {
     register,
@@ -114,6 +119,13 @@ function UrlStep({ onJobIngested }: { onJobIngested: (job: Job) => void }) {
 /*  Step 2 – Job preview + actions                                    */
 /* ------------------------------------------------------------------ */
 
+/**
+ * A component that displays a job preview with its title, company, location, and job type.
+ * It also displays the job summary and description if they are available.
+ *
+ * @param {{ job: Job }} props - The props object.
+ * @returns A JSX element.
+ */
 function JobPreview({ job }: { job: Job }) {
   return (
     <Card>
@@ -160,6 +172,16 @@ function JobPreview({ job }: { job: Job }) {
 /*  Match Resume panel                                                */
 /* ------------------------------------------------------------------ */
 
+/**
+ * A component that allows users to match their resume with job postings.
+ *
+ * It takes in a job object and displays a text input field for the user to paste their resume into.
+ * When the user clicks the "Match Resume" button, it sends a request to the server to match the resume with the job posting and its corresponding candidates.
+ * If the request is successful, it displays a list of the matches found, along with the similarity score and the job title, company, and location.
+ *
+ * @param {{ job: Job }} props - The props object.
+ * @returns A JSX element.
+ */
 function MatchPanel({ job }: { job: Job }) {
   const [resumeText, setResumeText] = useState("");
 
@@ -236,6 +258,11 @@ function MatchPanel({ job }: { job: Job }) {
 /*  Cover Letter panel                                                */
 /* ------------------------------------------------------------------ */
 
+/**
+ * A component that generates a cover letter based on a job ID.
+ * @param {{ job: Job }} props - The props object.
+ * @param {Job} props.job - The job object to generate a cover letter for.
+ */
 function CoverLetterPanel({ job }: { job: Job }) {
   const [resumeText, setResumeText] = useState("");
   const [tone, setTone] = useState<string>("professional");
@@ -353,6 +380,22 @@ function CoverLetterPanel({ job }: { job: Job }) {
 
 type ActivePanel = "match" | "cover-letter" | null;
 
+/**
+ * The ApplyPage component is the main page of the application.
+ * It allows users to paste a job posting URL, then match their resume or
+ * generate a cover letter.
+ *
+ * The page is divided into two steps:
+ * 1. URL input: The user can paste a job posting URL.
+ * 2. Job preview: After pasting the URL, the page displays the job preview
+ *    and two action buttons: "Match Resume" and "Generate Cover Letter".
+ *    The user can click on either button to perform the corresponding action.
+ *
+ * The page also displays the active panel based on the user's selection.
+ * If the user clicks on "Match Resume", the page displays the MatchPanel
+ * component. If the user clicks on "Generate Cover Letter", the page
+ * displays the CoverLetterPanel component.
+ */
 export default function ApplyPage() {
   const [job, setJob] = useState<Job | null>(null);
   const [activePanel, setActivePanel] = useState<ActivePanel>(null);

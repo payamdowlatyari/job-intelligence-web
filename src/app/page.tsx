@@ -1,8 +1,15 @@
 import Link from "next/link";
-import { Briefcase, Zap, FileText } from "lucide-react";
+import { Briefcase, Zap, FileText, Link2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const features = [
+  {
+    href: "/apply",
+    icon: Link2,
+    title: "Apply for Jobs",
+    description:
+      "Find and apply for job postings from top companies with just a few clicks.",
+  },
   {
     href: "/jobs",
     icon: Briefcase,
@@ -30,7 +37,7 @@ const features = [
  * The Home component renders a landing page with a hero section and a feature grid.
  *
  * The hero section contains a heading, a description, and a call-to-action to get started.
- * The feature grid contains three cards, each with a title, description, and a call-to-action to learn more.
+ * The feature grid contains four cards, each with a title, description, and a call-to-action to learn more.
  */
 export default function Home() {
   return (
@@ -45,7 +52,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {features.map(({ href, icon: Icon, title, description }) => (
           <Link key={href} href={href} className="group block">
             <Card className="h-full transition-shadow group-hover:shadow-lg">

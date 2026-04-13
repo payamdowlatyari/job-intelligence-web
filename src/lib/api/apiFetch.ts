@@ -44,7 +44,14 @@ export async function apiFetch<T>(
     throw new Error(message);
   }
 
-  const body = await res.json();
+  const text = await res.text();
+
+  if (!text) {
+    // 204 No Content or empty body – callers expecting no return value (void) should type T as void
+    return undefined as T;
+  }
+
+  const body = JSON.parse(text);
 
   if (responseKey === null) {
     return body as T;

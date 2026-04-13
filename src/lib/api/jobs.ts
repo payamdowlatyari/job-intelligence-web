@@ -1,5 +1,5 @@
 import { apiFetch } from "./apiFetch";
-import type { Job } from "../types";
+import type { Job, CreateJobRequest, UpdateJobRequest } from "../types";
 
 /**
  * Fetches a list of jobs from the API, filtered by the given parameters.
@@ -33,4 +33,32 @@ export function fetchJobs(params: {
  */
 export function fetchJob(id: string): Promise<Job> {
   return apiFetch<Job>(`/jobs/${id}`);
+}
+
+export function createJob(data: CreateJobRequest): Promise<Job> {
+  return apiFetch<Job>(
+    "/jobs",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    },
+    null,
+  );
+}
+
+export function updateJob(id: string, data: UpdateJobRequest): Promise<Job> {
+  return apiFetch<Job>(
+    `/jobs/${id}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    },
+    null,
+  );
+}
+
+export function deleteJob(id: string): Promise<void> {
+  return apiFetch<void>(`/jobs/${id}`, { method: "DELETE" }, null);
 }

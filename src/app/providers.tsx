@@ -5,6 +5,11 @@ import { SessionProvider } from "next-auth/react";
 import { useState } from "react";
 import { ResumeProvider } from "@/lib/resume-context";
 
+/**
+ * A component that wraps the application with NextAuth's SessionProvider, TanStack's QueryClientProvider, and the ResumeProvider.
+ * This component is required for the application to function correctly.
+ * It provides the necessary context for authentication, caching, and resume text management.
+ */
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
     () =>
