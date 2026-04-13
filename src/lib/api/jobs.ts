@@ -1,4 +1,4 @@
-import { apiFetch, getApiUrl } from "./apiFetch";
+import { apiFetch } from "./apiFetch";
 import type { Job, CreateJobRequest, UpdateJobRequest } from "../types";
 
 /**
@@ -59,10 +59,6 @@ export function updateJob(id: string, data: UpdateJobRequest): Promise<Job> {
   );
 }
 
-export async function deleteJob(id: string): Promise<void> {
-  const url = getApiUrl(`/jobs/${id}`);
-  const res = await fetch(url, { method: "DELETE" });
-  if (!res.ok) {
-    throw new Error(`Delete failed: ${res.status} ${res.statusText}`);
-  }
+export function deleteJob(id: string): Promise<void> {
+  return apiFetch<void>(`/jobs/${id}`, { method: "DELETE" }, null);
 }
