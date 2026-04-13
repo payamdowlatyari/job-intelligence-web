@@ -24,6 +24,9 @@ export default function RootLayout({
         <Providers>
           <Header />
           <main className="flex-1">{children}</main>
+          <footer className="border-t border-border bg-card py-6 text-center text-sm text-muted-foreground">
+            <p>&copy; {new Date().getFullYear()} Job Intelligence. All rights reserved.</p>
+          </footer>
         </Providers>
       </body>
     </html>
