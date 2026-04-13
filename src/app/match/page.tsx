@@ -27,6 +27,9 @@ const matchSchema = z.object({
 
 type MatchFormValues = z.infer<typeof matchSchema>;
 
+/**
+ * Page for matching resumes to job openings.
+ */
 export default function MatchPage() {
   const {
     register,
@@ -49,7 +52,7 @@ export default function MatchPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
+    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
       <h1 className="text-2xl font-bold tracking-tight text-foreground mb-2">
         Resume Match
       </h1>

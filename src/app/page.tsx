@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Briefcase, Zap, FileText, Link2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ApplyWorkflow } from "@/components/ApplyWorkflow";
 
 const features = [
   {
@@ -70,6 +71,20 @@ export default function Home() {
             </Card>
           </Link>
         ))}
+      </div>
+
+      {/* Apply for a Job */}
+      <div className="mt-14 rounded-xl border border-border bg-card p-6 shadow-sm">
+        <div className="mb-6">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            Apply for a Job
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Paste a job posting URL to parse it, then match your resume or
+            generate a cover letter.
+          </p>
+        </div>
+        <ApplyWorkflow />
       </div>
     </div>
   );
