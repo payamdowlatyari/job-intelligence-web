@@ -50,6 +50,13 @@ const LENGTHS = ["short", "medium", "long"] as const;
 /*  URL input                                                         */
 /* ------------------------------------------------------------------ */
 
+/**
+ * A step in the apply workflow that fetches a job from a given URL.
+ * It renders a form with a single input field for the job posting URL.
+ * When the form is submitted, it calls the `ingestJobFromUrl` mutation function to ingest the job.
+ * If the mutation is successful, it calls the `onJobIngested` callback with the ingested job.
+ * If the mutation is an error, it renders an error message.
+ */
 function UrlStep({ onJobIngested }: { onJobIngested: (job: Job) => void }) {
   const {
     register,
@@ -114,6 +121,10 @@ function UrlStep({ onJobIngested }: { onJobIngested: (job: Job) => void }) {
 /*  Job preview                                                       */
 /* ------------------------------------------------------------------ */
 
+/**
+ * A card component that displays a job preview.
+ * @param {job: Job} - The job to display.
+ */
 function JobPreview({ job }: { job: Job }) {
   return (
     <Card>
@@ -160,6 +171,13 @@ function JobPreview({ job }: { job: Job }) {
 /*  Match Resume panel                                                */
 /* ------------------------------------------------------------------ */
 
+/**
+ * A component that matches a resume with job openings.
+ *
+ * The component contains a ResumeInput field and a button to trigger the match.
+ * When the match is pending, it displays a spinner. If the match is an error, it displays an error message.
+ * If the match is successful, it displays the matches found.
+ */
 function MatchPanel({ job }: { job: Job }) {
   const [resumeText, setResumeText] = useState("");
 
@@ -236,6 +254,15 @@ function MatchPanel({ job }: { job: Job }) {
 /*  Cover Letter panel                                                */
 /* ------------------------------------------------------------------ */
 
+/**
+ * A component that generates a cover letter based on a job posting.
+ *
+ * The component takes a job object as a prop and renders a form with fields for the job ID, resume text, tone, and length.
+ * When the form is submitted, it calls the `generateCoverLetter` mutation function to generate a cover letter.
+ *
+ * If the mutation is pending, it displays a spinner. If the mutation is an error, it displays an error message.
+ * If the mutation is successful, it displays the generated cover letter.
+ */
 function CoverLetterPanel({ job }: { job: Job }) {
   const [resumeText, setResumeText] = useState("");
   const [tone, setTone] = useState<string>("professional");
@@ -353,6 +380,11 @@ function CoverLetterPanel({ job }: { job: Job }) {
 
 type ActivePanel = "match" | "cover-letter" | null;
 
+/**
+ * A component that allows users to apply to a job by pasting a job posting URL.
+ * The component renders a form to input the job posting URL, then renders the
+ * ApplyWorkflow component to match the user's resume or generate a cover letter.
+ */
 export function ApplyWorkflow() {
   const [job, setJob] = useState<Job | null>(null);
   const [activePanel, setActivePanel] = useState<ActivePanel>(null);

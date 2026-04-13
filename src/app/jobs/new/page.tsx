@@ -26,6 +26,13 @@ const createJobSchema = z.object({
 
 type CreateJobForm = z.infer<typeof createJobSchema>;
 
+/**
+ * The NewJobPage component renders a page for creating a new job.
+ * It displays a form with eight fields: title, company, location, job type, URL, summary, and description.
+ * The form can be submitted to create a new job.
+ * If there is an error creating the job, it renders an error message.
+ * If the job is created successfully, it redirects the user to the job page.
+ */
 export default function NewJobPage() {
   const router = useRouter();
 

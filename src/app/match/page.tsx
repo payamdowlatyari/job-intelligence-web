@@ -27,6 +27,9 @@ const matchSchema = z.object({
 
 type MatchFormValues = z.infer<typeof matchSchema>;
 
+/**
+ * Page for matching resumes to job openings.
+ */
 export default function MatchPage() {
   const {
     register,

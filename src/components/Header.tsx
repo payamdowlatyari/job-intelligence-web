@@ -1,9 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
-import { Briefcase, LogOut, LogIn } from "lucide-react";
+import { Briefcase, LogOut, LogIn, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -20,6 +21,7 @@ const navLinks = [
 export function Header() {
   const pathname = usePathname();
   const { data: session, status } = useSession();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -31,7 +33,8 @@ export function Header() {
           <span>Job Intelligence</span>
         </Link>
 
-        <nav className="flex items-center gap-1 ml-2">
+        {/* Desktop nav */}
+        <nav className="hidden md:flex items-center gap-1 ml-2">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
@@ -51,6 +54,7 @@ export function Header() {
           {status === "loading" ? null : session?.user ? (
             <div className="flex items-center gap-3">
               {session.user.image && (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={session.user.image}
                   alt=""
@@ -67,7 +71,7 @@ export function Header() {
                 onClick={() => signOut()}
                 className="gap-1.5 text-xs">
                 <LogOut className="h-3.5 w-3.5" />
-                Sign out
+                <span className="hidden sm:inline">Sign out</span>
               </Button>
             </div>
           ) : (
@@ -78,8 +82,42 @@ export function Header() {
               </Link>
             </Button>
           )}
+
+          {/* Mobile menu toggle */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="md:hidden"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu">
+            {menuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </Button>
         </div>
       </div>
+
+      {/* Mobile nav */}
+      {menuOpen && (
+        <nav className="md:hidden border-t border-border bg-background px-4 py-3 space-y-1">
+          {navLinks.map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={() => setMenuOpen(false)}
+              className={cn(
+                "block rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                pathname === href || pathname.startsWith(href + "/")
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              )}>
+              {label}
+            </Link>
+          ))}
+        </nav>
+      )}
     </header>
   );
 }
