@@ -37,6 +37,8 @@ import { Spinner } from "@/components/Spinner";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { ResumeInput } from "@/components/ResumeInput";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const urlSchema = z.object({
   job_url: z.string().url("Must be a valid URL"),
@@ -390,6 +392,7 @@ export function ApplyWorkflow() {
   const [job, setJob] = useState<Job | null>(null);
   const [activePanel, setActivePanel] = useState<ActivePanel>(null);
   const { data: session, status } = useSession();
+  const pathname = usePathname();
 
   if (status === "loading") {
     return (
@@ -415,10 +418,12 @@ export function ApplyWorkflow() {
           and application tracking.
         </p>
         <Button asChild>
-          <a href="/sign-in" className="gap-2">
+          <Link
+            href={`/sign-in?callbackUrl=${encodeURIComponent(pathname)}`}
+            className="gap-2">
             <Zap className="h-4 w-4" />
             Get Started
-          </a>
+          </Link>
         </Button>
       </div>
     );
