@@ -389,11 +389,22 @@ type ActivePanel = "match" | "cover-letter" | null;
 export function ApplyWorkflow() {
   const [job, setJob] = useState<Job | null>(null);
   const [activePanel, setActivePanel] = useState<ActivePanel>(null);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return (
+      <div className="rounded-xl border border-border bg-card p-6">
+        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+          <Spinner />
+          <span>Loading your session...</span>
+        </div>
+      </div>
+    );
+  }
 
   // If the user is not signed in, show a message.
   // Create an opportunity to show the benefits of signing in, such as saving resumes and cover letters, tracking applications, etc.
-  if (!session) {
+  if (status === "unauthenticated") {
     return (
       <div className="rounded-xl border border-border bg-card p-6 text-center">
         <h2 className="text-lg font-semibold mb-2">
