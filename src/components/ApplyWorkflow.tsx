@@ -36,6 +36,9 @@ import {
 import { Spinner } from "@/components/Spinner";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { ResumeInput } from "@/components/ResumeInput";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const urlSchema = z.object({
   job_url: z.string().url("Must be a valid URL"),
@@ -388,58 +391,104 @@ type ActivePanel = "match" | "cover-letter" | null;
 export function ApplyWorkflow() {
   const [job, setJob] = useState<Job | null>(null);
   const [activePanel, setActivePanel] = useState<ActivePanel>(null);
+  const { data: session, status } = useSession();
+  const pathname = usePathname();
+
+  if (status === "loading") {
+    return (
+      <div className="rounded-xl border border-border bg-card p-6">
+        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+          <Spinner />
+          <span>Loading your session...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // If the user is not signed in, show a message.
+  // Create an opportunity to show the benefits of signing in, such as saving resumes and cover letters, tracking applications, etc.
+  if (status === "unauthenticated") {
+    return (
+      <div className="rounded-xl border border-border bg-card p-6 text-center">
+        <h2 className="text-lg font-semibold mb-2">
+          Welcome to the Job Intelligence Platform
+        </h2>
+        <p className="text-sm text-muted-foreground mb-4">
+          Sign in to access personalized job matching, cover letter generation,
+          and application tracking.
+        </p>
+        <Button asChild>
+          <Link
+            href={`/sign-in?callbackUrl=${encodeURIComponent(pathname)}`}
+            className="gap-2">
+            <Zap className="h-4 w-4" />
+            Get Started
+          </Link>
+        </Button>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6">
-      <UrlStep
-        onJobIngested={ingestedJob => {
-          setJob(ingestedJob);
-          setActivePanel(null);
-        }}
-      />
+    <div className="space-y-4">
+      <h2 className="text-xl md:text-2xl font-bold tracking-tight text-foreground">
+        Apply for a Job
+      </h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Paste a job posting URL to parse it, then match your resume or generate
+        a cover letter.
+      </p>
+      <div className="space-y-6">
+        <UrlStep
+          onJobIngested={ingestedJob => {
+            setJob(ingestedJob);
+            setActivePanel(null);
+          }}
+        />
 
-      {job && (
-        <>
-          <Separator />
-          <JobPreview job={job} />
+        {job && (
+          <>
+            <Separator />
+            <JobPreview job={job} />
 
-          <div className="flex gap-3">
-            <Button
-              variant={activePanel === "match" ? "default" : "outline"}
-              onClick={() =>
-                setActivePanel(activePanel === "match" ? null : "match")
-              }
-              className="gap-2">
-              <Zap className="h-4 w-4" />
-              Match Resume
-            </Button>
-            <Button
-              variant={activePanel === "cover-letter" ? "default" : "outline"}
-              onClick={() =>
-                setActivePanel(
-                  activePanel === "cover-letter" ? null : "cover-letter",
-                )
-              }
-              className="gap-2">
-              <FileText className="h-4 w-4" />
-              Generate Cover Letter
-            </Button>
-          </div>
+            <div className="flex gap-3">
+              <Button
+                variant={activePanel === "match" ? "default" : "outline"}
+                onClick={() =>
+                  setActivePanel(activePanel === "match" ? null : "match")
+                }
+                className="gap-2">
+                <Zap className="h-4 w-4" />
+                Match Resume
+              </Button>
+              <Button
+                variant={activePanel === "cover-letter" ? "default" : "outline"}
+                onClick={() =>
+                  setActivePanel(
+                    activePanel === "cover-letter" ? null : "cover-letter",
+                  )
+                }
+                className="gap-2">
+                <FileText className="h-4 w-4" />
+                Generate Cover Letter
+              </Button>
+            </div>
 
-          {activePanel === "match" && (
-            <>
-              <Separator />
-              <MatchPanel job={job} />
-            </>
-          )}
-          {activePanel === "cover-letter" && (
-            <>
-              <Separator />
-              <CoverLetterPanel job={job} />
-            </>
-          )}
-        </>
-      )}
+            {activePanel === "match" && (
+              <>
+                <Separator />
+                <MatchPanel job={job} />
+              </>
+            )}
+            {activePanel === "cover-letter" && (
+              <>
+                <Separator />
+                <CoverLetterPanel job={job} />
+              </>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }

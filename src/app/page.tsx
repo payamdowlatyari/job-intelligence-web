@@ -40,7 +40,7 @@ const features = [
  * The hero section contains a heading, a description, and a call-to-action to get started.
  * The feature grid contains four cards, each with a title, description, and a call-to-action to learn more.
  */
-export default function Home() {
+export default async function Home() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
       <div className="text-center mb-14">
@@ -75,15 +75,6 @@ export default function Home() {
 
       {/* Apply for a Job */}
       <div className="mt-14 rounded-xl border border-border bg-card p-6 shadow-sm">
-        <div className="mb-6">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Apply for a Job
-          </h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Paste a job posting URL to parse it, then match your resume or
-            generate a cover letter.
-          </p>
-        </div>
         <ApplyWorkflow />
       </div>
     </div>
