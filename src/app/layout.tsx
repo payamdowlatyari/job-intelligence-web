@@ -3,6 +3,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { AuthGuard } from "@/components/AuthGuard";
 
 export const metadata: Metadata = {
   title: "Job Intelligence",
@@ -24,7 +25,9 @@ export default function RootLayout({
         suppressHydrationWarning>
         <Providers>
           <Header />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1">
+            <AuthGuard>{children}</AuthGuard>
+          </main>
           <Footer />
         </Providers>
       </body>

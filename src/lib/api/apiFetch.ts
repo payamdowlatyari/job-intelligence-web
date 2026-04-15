@@ -1,3 +1,5 @@
+import { getStoredToken } from "@/lib/auth-context";
+
 const baseURL =
   process.env.NODE_ENV === "production"
     ? process.env.NEXT_PUBLIC_API_BASE_URL
@@ -30,7 +32,13 @@ export async function apiFetch<T>(
 ): Promise<T> {
   const url = getApiUrl(path);
 
-  const res = await fetch(url, options);
+  const headers = new Headers(options?.headers);
+  const token = getStoredToken();
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  const res = await fetch(url, { ...options, headers });
 
   if (!res.ok) {
     let message = `Request failed: ${res.status} ${res.statusText}`;
